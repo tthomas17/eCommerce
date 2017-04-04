@@ -1,0 +1,36 @@
+/*Custom CSS File*/
+
+body{
+	font-family: 'Roboto', sans-serif;
+}
+
+.jumbotron{
+	background-color: #ccc;
+}
+.navbar{
+	margin-bottom: 0;
+	background-color: #27ae60;
+	border: 1px solid #27ae60;
+	border-radius: 0;
+}
+
+.navbar-default .navbar-brand {
+
+	color: #fff;
+}
+
+.navbar-collapse .navbar-nav>li>a{
+	color: #fff;
+}
+
+.navbar-default .navbar-toggle {
+   border-color: transparent !important;
+}
+.navbar-toggle {
+	background-color: #27ae60 !important;
+}
+.navbar-toggle:hover {
+	background-color: #2abc68 !important;
+}
+
+

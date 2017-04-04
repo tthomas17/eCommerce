@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+<div class="row">
+  <div class="col-sm-8">
+        <h2>{{product.title}}</h2>
+
+{% if product.productimage_set.count > 0 %}
+	{% for img in product.productimage_set.all %}
+	{{ img.image.file }}
+	{{ img.image.url }}
+        <img class='img-responsive' src='{{ img.image.url }}' alt='{{product.title}} Image' />
+    {% endfor %}
+
+{% endif %}
+
+  </div>
+  <!-- Product Side bar -->
+   <div class="col-sm-4">
+   		<h3>{{product.description}}</h3>
+        <h3>{{product.price}}</h3>
+
+        {% if product.variation_set.count > 1 %}
+	        <select class='form-control'>
+				{% for variation in product.variation_set.all%}
+				<option value="{{variation.id}}">{{variation.title}}</option>
+				{% endfor %}
+			</select>
+		{% endif %}
+		<a class='btn btn-success' href=''>Add to Cart</a>
+		<p><a href='{% url "product_list"%}' role="button">Return to Product List</a></p>
+		<hr/>
+		<h4> Related Products</h4>
+	</div>
+	 <!-- end Product Side bar -->
+</div>
+
+
+
+
+
+{% endblock %}
