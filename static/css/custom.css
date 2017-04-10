@@ -33,4 +33,8 @@ body{
 	background-color: #2abc68 !important;
 }
 
+.org-price {
+	text-decoration: line-through;
+}
+
 

@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h3>{{category}}</h3>
 <table class='table'>
-{% for product in product_list %}
+{% for product in category.product_set.all %}
+
 <tr>
 <td><a href='{{ product.get_absolute_url }}'>{{product.title}}</a></td>
 <td>{{product.description}}</td>
@@ -10,5 +12,6 @@
 
 {% endfor %}
 </table>
+
 
 {% endblock %}

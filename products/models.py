@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -18,6 +19,13 @@ class ProductManager(models.Manager):
 	def all(self, *args, **kwargs):
 		return self.get_queryset().active()
 
+	def get_related(self, instance):
+		products_one = self.get_queryset().filter(categories__in = instance.categories.all())
+		products_two = self.get_queryset().filter(default=instance.default)
+		qs = (products_one | products_two).exclude(id=instance.id).distinct()
+		return qs
+
+
 
 
 class Product (models.Model):
@@ -25,8 +33,8 @@ class Product (models.Model):
 	description = models.TextField(blank=True, null=True)
 	price = models.DecimalField(decimal_places= 2, max_digits=20)
 	active = models.BooleanField(default=True)
-	#slug
-	# inventory?
+	categories = models.ManyToManyField('Category', blank=True)
+	default = models.ForeignKey('Category', related_name='default_category', null=True, blank=True)
 
 	objects = ProductManager()
 
@@ -69,19 +77,49 @@ def product_post_saved_receiver(sender, instance, created, *args, **kwargs):
 
 post_save.connect(product_post_saved_receiver, sender=Product)
 
-
-#Product Images
+def image_upload_to(instance, filename):
+	title = instance.product.title
+	slug = slugify(title)
+	# file_extention = filename.split(".")[1]
+	# new_filename = "%s.%s" %(instance.id, file_extension)
+	return "products/%s/%s" %(slug, filename)
 
 class ProductImage(models.Model):
 	product = models.ForeignKey(Product)
-	image = models.ImageField(upload_to='products/img/')
+	image = models.ImageField(upload_to=image_upload_to)
 
 	def __unicode__(self):
 		return self.product.title
 
-
-
 #Product Category
+
+class Category(models.Model):
+	title = models.CharField(max_length=120, unique=True)
+	slug = models.SlugField(unique=True)
+	description = models.TextField(null=True, blank=True)
+	active = models.BooleanField(default=True)
+	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+	def __unicode__(self):
+		return self.title
+
+	def get_absolute_url(self):
+		return reverse("category_detail", kwargs={"slug": self.slug })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

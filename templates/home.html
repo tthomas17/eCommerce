@@ -3,8 +3,21 @@
 {% block jumbotron %}
 <div class="jumbotron">
 	<div class='container'>
-	  <h1>Discover products worth living for</h1>
-    <p><a class="btn btn-primary btn-lg" href='{% url "product_list"%}' role="button">View Products</a></p>
+
+<div class='row'>
+  <div class='col-md-6'>
+    <h1>Discover Products Worth Living For</h1>
+    <!-- <p><a class="btn btn-primary btn-lg" href='{% url "product_list"%}' role="button">View Products</a></p> -->
+    <form methon='GET' role='search' action='{% url "product_list" %}'>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search" name="q">
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+  </div>
+
+
 	</div>
 </div>
 
