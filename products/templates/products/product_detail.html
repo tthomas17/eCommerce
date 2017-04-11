@@ -26,12 +26,9 @@
   <div class="col-sm-8">
         <h2>{{product.title}}</h2>
 
-{% if product.productimage_set.count > 0 %}
-	{% for img in product.productimage_set.all %}
-        <img class='img-responsive' src='{{ img.image.url }}' alt='{{product.title}} Image' />
-    {% endfor %}
-
-{% endif %}
+		{% if object.get_image_url %}
+			<img class='img-responsive' src='{{ object.get_image_url }}' alt='{{product.title}} Image' />
+		{% endif %}
 
   </div>
   <!-- Product Side bar -->
@@ -69,17 +66,14 @@
 		<p><a href='{% url "product_list"%}' role="button">Return to Product List</a></p>
 		<hr/>
 		<h4> Related Products</h4>
-		{% for product in related %}
-		<a href='{{ product.get_absolute_url }}'>{{product.title}}</a><br/>
-		<!-- Show Images in Related Products -->
-		<!-- {% if product.productimage_set.count > 0 %}
-		{% for img in product.productimage_set.all %}
-		<img class='img-responsive' src='{{ img.image.url }}' alt='{{product.title}} Image' />
+		<div class='row'>
+			{% for product in related %}
+			<div class='col-xs-6'>
+				{% include 'products/product_template.html' with product=product %}
+			</div>
+			{% cycle '' '</div><div class="row">' %}
 		{% endfor %}
-
-		{% endif %} -->
-
-		{% endfor %}
+		</div>
 	</div>
 	 <!-- end Product Side bar -->
 </div>

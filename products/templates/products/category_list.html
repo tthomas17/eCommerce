@@ -1,14 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<table class='table'>
+
+<h1> Categories <small><a href='{% url "product_list" %}'>All Products</a></small></h1>
+
+<div class='row'>
 {% for category in category_list %}
-<tr>
-<td><a href='{{ category.get_absolute_url }}'>{{category.title}}</a></td>
-<td>{{category.description}}</td>
-</tr>
+
+
+<div class='col-sm-3'>
+				<div class="thumbnail text-center">
+					<div class="caption">
+	        			<h3><a href='{{ category.get_absolute_url }}'>{{category.title}}</a></h3>
+	        			<p>{{category.description}}</p>
+      				</div>
+				</div>
+			</div>
+			{% cycle '' '' '' ''  '</div><div class="row">' %}
+
+
 
 {% endfor %}
-</table>
+</div>
 
 {% endblock %}

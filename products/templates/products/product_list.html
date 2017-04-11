@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<table class='table'>
-{% for product in product_list %}
-<tr>
-<td><a href='{{ product.get_absolute_url }}'>{{product.title}}</a></td>
-<td>{{product.description}}</td>
-</tr>
 
+<h1> All Products <small><a href='{% url "category_list" %}'>Categories</a></small></h1>
+
+<div class='row'>
+{% for product in product_list %}
+<div class='col-sm-3'>
+{% include 'products/product_template.html' with product=product price='True' %}
+</div>
+{% cycle '' '' '' ''  '</div><div class="row">' %}
 {% endfor %}
-</table>
+</div>
 
 {% endblock %}
