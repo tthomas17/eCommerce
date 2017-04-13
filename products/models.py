@@ -128,6 +128,31 @@ class Category(models.Model):
 
 
 
+def image_upload_to_featured(instance, filename):
+	title = instance.product.title
+	slug = slugify(title)
+	# file_extention = filename.split(".")[1]
+	# new_filename = "%s.%s" %(instance.id, file_extension)
+	return "products/%s/featured/%s" %(slug, filename)
+
+
+class ProductFeatured(models.Model):
+	product = models.ForeignKey(Product)
+	image = models.ImageField(upload_to=image_upload_to_featured)
+	title = models.CharField(max_length=120,null=True,blank=True)
+	text = models.CharField(max_length=220,null=True,blank=True)
+	text_right = models.BooleanField(default=False)
+	show_price = models.BooleanField(default=False)
+	make_background = models.BooleanField(default=False)
+	active = models.BooleanField(default=True)
+
+	def __unicode__(self):
+		return self.product.title
+
+
+
+
+
 
 
 

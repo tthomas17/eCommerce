@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block jumbotron %}
-<div class="jumbotron">
+
+
+<div class="jumbotron"  >
 	<div class='container'>
 
 <div class='row'>
@@ -14,6 +16,11 @@
       </div>
       <button type="submit" class="btn btn-primary">Search</button>
     </form>
+  </div>
+  <div class='col-md-6'>
+    {% if featured_image %}
+    <a href='{{ featured_image.product.get_absolute_url }}'><img src="{{ featured_image.image.url }}" class='img-responsive' /></a>
+    {% endif %}
   </div>
   </div>
 
@@ -29,7 +36,20 @@
   <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-md-4">
+        <h2>Shop by Category</h2>
+        {% for category in categories_list %}
+          <div class='col-sm-4'>
+            <div class="thumbnail text-center">
+              <div class="caption">
+                <h2><a href='{{ category.get_absolute_url }}'>{{category.title}}</a><h2>
+                <p>{{category.description}}</p>
+              </div>
+            </div>
+
+          </div>
+          {% cycle '' '' '</div><div class="row">' %}
+        {% endfor %}
+      <!--   <div class="col-md-4">
           <h2>Heading</h2>
           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
@@ -43,8 +63,9 @@
           <h2>Heading</h2>
           <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-
+        </div> -->
+    </div>
+  </div>
 
 
 {% endblock %}
