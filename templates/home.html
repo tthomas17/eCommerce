@@ -39,6 +39,9 @@
         <h2>Shop by Category</h2>
         {% for category in categories_list %}
           <div class='col-sm-4'>
+            {% if category.get_category_image_url %}
+                  <img class='img-responsive' src='{{ category.get_category_image_url }}' alt='{{category.title}} Image' />
+            {% endif %}
             <div class="thumbnail text-center">
               <div class="caption">
                 <h2><a href='{{ category.get_absolute_url }}'>{{category.title}}</a><h2>

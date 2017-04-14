@@ -122,9 +122,26 @@ class Category(models.Model):
 	def get_absolute_url(self):
 		return reverse("category_detail", kwargs={"slug": self.slug })
 
+	def get_category_image_url(self):
+		img = self.categoryimage_set.first()
+		if img:
+			return img.image.url
+		else:
+			return img #None
 
-#CategoryImage?
+def category_image_upload_to(instance, filename):
+	title = instance.category.title
+	slug = slugify(title)
+	# file_extention = filename.split(".")[1]
+	# new_filename = "%s.%s" %(instance.id, file_extension)
+	return "categories/%s/%s" %(slug, filename)
 
+class CategoryImage(models.Model):
+	category = models.ForeignKey(Category)
+	image = models.ImageField(upload_to=category_image_upload_to)
+
+	def __unicode__(self):
+		return self.category.title
 
 
 
