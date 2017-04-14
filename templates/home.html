@@ -8,7 +8,7 @@
 
 <div class='row'>
   <div class='col-md-6'>
-    <h1>Discover Products Worth Living For</h1>
+    <h1>Discover Products, Create a Lifestyle.</h1>
     <!-- <p><a class="btn btn-primary btn-lg" href='{% url "product_list"%}' role="button">View Products</a></p> -->
     <form methon='GET' role='search' action='{% url "product_list" %}'>
       <div class="form-group">
@@ -36,9 +36,10 @@
   <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <h2>Shop by Category</h2>
+        <h2 class='text-center'>Shop by Category</h2>
+        <hr/>
         {% for category in categories_list %}
-          <div class='col-sm-4'>
+          <div class='col-sm-2'>
             {% if category.get_category_image_url %}
                   <img class='img-responsive' src='{{ category.get_category_image_url }}' alt='{{category.title}} Image' />
             {% endif %}
@@ -50,24 +51,25 @@
             </div>
 
           </div>
-          {% cycle '' '' '</div><div class="row">' %}
+          {% cycle '' '' '' '' '</div><div class="row">' %}
         {% endfor %}
-      <!--   <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div> -->
+
+
     </div>
+     <hr/>
+      <div class="row">
+        <h2 class='text-center'>Featured Products</h2>
+        <hr/>
+        {% for product in products %}
+        <div class='col-sm-3'>
+          {% include 'products/product_template.html' %}
+          </div>
+        {% cycle '' '' '' '</div><div class="row">' %}
+        {% endfor %}
+      </div>
+
+
+
   </div>
 
 
