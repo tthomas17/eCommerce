@@ -3,14 +3,42 @@ from django.contrib import admin
 # Register your models here.
 from .models import Product, Variation, ProductImage, Category, CategoryImage, ProductFeatured
 
-admin.site.register(Product)
 
-admin.site.register(Variation)
+class ProductImageInline(admin.TabularInline):
+	model = ProductImage
+	extra = 0
 
-admin.site.register(ProductImage)
+class VariationInline(admin.TabularInline):
+	model = Variation
+	extra = 0
 
-admin.site.register(Category)
+class ProductAdmin(admin.ModelAdmin):
+	list_display = ['__unicode__', 'price']
+	inlines =[
+		ProductImageInline,
+		VariationInline
+	]
+	class Meta:
+		model = Product
 
-admin.site.register(CategoryImage)
 
+class CategoryImageInline(admin.TabularInline):
+	model = CategoryImage
+	extra = 0
+
+
+class CategoryAdmin(admin.ModelAdmin):
+	list_display = ['__unicode__']
+	inlines =[
+		CategoryImageInline,
+	]
+	class Meta:
+		model = Category
+
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(ProductFeatured)
+
+
+
+
