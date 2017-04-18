@@ -16,11 +16,32 @@
 	$(".variation_select").change(function(){
 		setPrice()
 	})
+
+	$('#submit-btn').click(function(){
+		event.preventDefault();
+		var formData = $("#add-form").serialize();
+		console.log(formData);
+		$.ajax({
+			type: "GET",
+			url: " {% url 'cart' %}",
+			data: formData,
+			success: function(data){
+				$('#ajax-message').text("Successfully added to cart")
+				showFlashMessage("Successfully added to cart");
+
+			},
+			error: function(response, error) {
+				$("#add-form").submit()
+			}
+		})
+
+	})
 	{% endblock %}
 	</script>
 
 <!-- Start Content -->
 {% block content %}
+
 
 <div class="row">
   <div class="col-sm-8">
@@ -29,50 +50,62 @@
 		{% if object.get_image_url %}
 			<img class='img-responsive' src='{{ object.get_image_url }}' alt='{{product.title}} Image' />
 		{% endif %}
-
   </div>
   <!-- Product Side bar -->
    <div class="col-sm-4">
    		<h3>{{product.description}}</h3>
 
+   			<form id='add-form' method='GET' action='{% url "cart" %}' >
+        	{% if product.variation_set.count > 1 %}
+      		<h3 id="price">
+						{{ product.variation_set.first.price }}
+					</h3>
+      		<p>Variation</p>
+	        <select name='item' class='form-control variation_select'>
+						{% for variation in product.variation_set.all%}
+						<option data-sale-price="{{ variation.sale_price }}" data-price="{{ variation.price }}" value="{{variation.id}}">{{variation.title}}</option>
+						{% endfor %}
+					</select>
+					{% else %}
+					<input type='hidden' name='item' value='{{ product.variation_set.first.id }}' />
+						<h3 id="price">
+						{% if product.variation_set.first.sale_price %}
+							{{product.variation_set.first.sale_price}}
+							<small class='org-price'> {{ product.variation_set.first.price }}</small>
+						{% else %}
 
-        {% if product.variation_set.count > 1 %}
-        	<h3 id="price">{{ product.variation_set.first.price }}</h3>
-	        <select class='form-control variation_select'>
-				{% for variation in product.variation_set.all%}
-				<option data-sale-price="{{ variation.sale_price }}" data-price="{{ variation.price }}" value="{{variation.id}}">{{variation.title}}</option>
-				{% endfor %}
-			</select>
-		{% else %}
-		<h3 id="price">{% if product.variation_set.first.sale_price %}
-			{{product.variation_set.first.sale_price}}
-			<small class='org-price'> {{ product.variation_set.first.price }}</small>
-			{% else %}
-			{{ product.variation_set.first.price }}
-			{% endif %}
-		</h3>
-		{% endif %}
-		<br/>
-		<a class='btn btn-success' href=''>Add to Cart</a>
-		<hr/>
+							{{ product.variation_set.first.price }}
+						{% endif %}
+						</h3>
+				{% endif %}
+				<br/>
+				<p>Quantity</p>
+				<input class='form-control' type='number' name='qty' value='1' />
 
-		<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
-			<i class="fa fa-facebook-official fa-2x" aria-hidden="true"></i>
-		</a>
-		<a href="#">
-			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
-		</a>
-		<hr/>
-		<p><a href='{% url "product_list"%}' role="button">Return to Product List</a></p>
-		<hr/>
-		<h4> Related Products</h4>
-		<div class='row'>
-			{% for product in related %}
-			<div class='col-xs-6'>
-				{% include 'products/product_template.html' with product=product %}
-			</div>
-			{% cycle '' '</div><div class="row">' %}
-		{% endfor %}
+				<br/>
+				<input id='submit-btn' type='submit' value='Add to Cart' class='btn btn-success'/>
+				</form>
+				<br/>
+				<a href='{% url "cart" %}'><p id='ajax-message'></p></a>
+				<hr/>
+
+			<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+				<i class="fa fa-facebook-official fa-2x" aria-hidden="true"></i>
+			</a>
+			<a href="#">
+				<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			</a>
+			<hr/>
+			<p><a href='{% url "product_list"%}' role="button">Return to Product List</a></p>
+			<hr/>
+			<h4> Related Products</h4>
+			<div class='row'>
+				{% for product in related %}
+				<div class='col-xs-6'>
+					{% include 'products/product_template.html' with product=product %}
+				</div>
+				{% cycle '' '</div><div class="row">' %}
+			{% endfor %}
 		</div>
 	</div>
 	 <!-- end Product Side bar -->

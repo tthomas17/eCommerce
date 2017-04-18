@@ -2,75 +2,71 @@
 
 {% block jumbotron %}
 
-
 <div class="jumbotron"  >
 	<div class='container'>
-
-<div class='row'>
-  <div class='col-md-6'>
-    <h1>Discover Products, Create a Lifestyle.</h1>
-    <!-- <p><a class="btn btn-primary btn-lg" href='{% url "product_list"%}' role="button">View Products</a></p> -->
-    <form methon='GET' role='search' action='{% url "product_list" %}'>
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search" name="q">
+    <div class='row'>
+      <div class='col-md-6'>
+        <h1>Discover Products, Create a Lifestyle.</h1>
+        <!-- Search Products Form -->
+        <form methon='GET' role='search' action='{% url "product_list" %}'>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="What are you looking for?" name="q">
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary">Search</button>
+            </span>
+          </div>
+        </form>
+        <!-- End Form -->
       </div>
-      <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-  </div>
-  <div class='col-md-6'>
-    {% if featured_image %}
-    <a href='{{ featured_image.product.get_absolute_url }}'><img src="{{ featured_image.image.url }}" class='img-responsive' /></a>
-    {% endif %}
-  </div>
-  </div>
 
-
-	</div>
+      <div class='col-md-6'>
+        {% if featured_image %}
+        <a href='{{ featured_image.product.get_absolute_url }}'><img src="{{ featured_image.image.url }}" class='img-responsive jumbotron-image' /></a>
+        {% endif %}
+      </div>
+      </div>
+	</div> <!-- end container -->
 </div>
-
 
 {% endblock %}
 
 {% block content %}
 
   <div class="container">
-      <!-- Example row of columns -->
+      <!-- Categories -->
       <div class="row">
         <h2 class='text-center'>Shop by Category</h2>
         <hr/>
         {% for category in categories_list %}
           <div class='col-sm-2'>
-            {% if category.get_category_image_url %}
-                  <img class='img-responsive' src='{{ category.get_category_image_url }}' alt='{{category.title}} Image' />
-            {% endif %}
             <div class="thumbnail text-center">
+              {% if category.get_category_image_url %}
+                  <img class='img-responsive' src='{{ category.get_category_image_url }}' alt='{{category.title}} Image' />
+              {% endif %}
               <div class="caption">
-                <h2><a href='{{ category.get_absolute_url }}'>{{category.title}}</a><h2>
+                <p class='lead'><a href='{{ category.get_absolute_url }}'>{{category.title}}</a><p>
                 <p>{{category.description}}</p>
               </div>
             </div>
 
           </div>
           {% cycle '' '' '' '' '</div><div class="row">' %}
-        {% endfor %}
+          {% endfor %}
+        </div>
+    <!-- End Categories -->
 
-
-    </div>
-     <hr/>
-      <div class="row">
-        <h2 class='text-center'>Featured Products</h2>
-        <hr/>
-        {% for product in products %}
-        <div class='col-sm-3'>
-          {% include 'products/product_template.html' %}
-          </div>
-        {% cycle '' '' '' '</div><div class="row">' %}
-        {% endfor %}
+    <!-- Feature Products  -->
+    <div class="row">
+      <h2 class='text-center'>Featured Products</h2>
+      <hr/>
+      {% for product in products %}
+      <div class='col-sm-3'>
+      {% include 'products/product_template.html' %}
       </div>
+      {% cycle '' '' '' '</div><div class="row">' %}
+      {% endfor %}
+    </div>
+    <!-- End Feature Products  -->
 
-
-
-  </div>
-
-
+  </div> <!-- end container-->
 {% endblock %}

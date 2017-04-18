@@ -5,13 +5,26 @@ body{
 }
 
 .jumbotron{
-	background-color: #ccc;
+	padding-top: 20px;
+	background-color: #f6f6f6;
+	max-height: 300px;
+
 }
+.jumbotron h1{
+	padding-top: 20px;
+	font-size: 58px;
+}
+
 .navbar{
 	margin-bottom: 0;
 	background-color: #27ae60;
 	border: 1px solid #27ae60;
 	border-radius: 0;
+}
+.jumbotron img{
+	padding-left: 100px;
+	margin-top: 0;
+	max-height: 250px;
 }
 
 .navbar-default .navbar-brand {
@@ -43,3 +56,12 @@ body{
 	vertical-align: middle;
 }
 
+.flash-alert-box{
+	position: absolute;
+	top: 10px;
+	z-index: 50000;
+	width: 100%;
+	right: 0%;
+	margin: 0px;
+	display: none;
+}

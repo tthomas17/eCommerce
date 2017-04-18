@@ -14,7 +14,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li class='shopping-cart'><a href='#'><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class='badge'>0</span></a></li>
+        <li class='shopping-cart'><a href='{% url "cart" %}'><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class='badge'>0</span></a></li>
         {% if request.user.is_authenticated %}
           <li><a href=''>Logged In as {{request.user}}</a></li>
           <li><a href="{% url 'auth_logout' %}">Logout</a></li>
