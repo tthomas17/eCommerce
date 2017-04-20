@@ -10,3 +10,5 @@ function showFlashMessage(message){
 			$(".flash-alert-box").fadeOut();
 		}, 1800);
 	}
+
+

@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, post_delete
 
 from products.models import Variation
 
@@ -37,6 +37,7 @@ def cart_item_post_save_receiver(sender, instance, *args, **kwargs):
 	instance.cart.update_subtotal()
 
 post_save.connect(cart_item_post_save_receiver, sender=CartItem)
+post_delete.connect(cart_item_post_save_receiver, sender=CartItem)
 
 
 class Cart(models.Model):
@@ -44,8 +45,12 @@ class Cart(models.Model):
 	items = models.ManyToManyField(Variation, through=CartItem)
 	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 	updated = models.DateTimeField(auto_now_add=False, auto_now=True)
-	subtotal = models.DecimalField(max_digits=50, decimal_places=2)
-
+	subtotal = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
+	tax_percentage = models.DecimalField(max_digits=10, decimal_places=5, default=0.085)
+	tax = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
+	total = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
+	#discounts
+	#shipping
 
 	def __unicode__(self):
 		return str(self.id)
@@ -55,11 +60,17 @@ class Cart(models.Model):
 		items = self.cartitem_set.all()
 		for item in items:
 			subtotal += item.line_item_total
-		self.subtotal = subtotal
+		self.subtotal = "%.2f" %(subtotal)
 		self.save()
 
+def tax_and_total_receiver(sender, instance, *args, **kwargs):
+	subtotal = Decimal(instance.subtotal)
+	tax = round(subtotal * Decimal(instance.tax_percentage), 2)
+	total = round(subtotal + Decimal(tax), 2)
+	instance.tax = "%.2f" %(tax)
+	instance.total = "%.2f" %(total)
 
-	#subtotal price
-	#taxes
-	#discounts
-	#total price
+pre_save.connect(tax_and_total_receiver, sender=Cart)
+
+
+

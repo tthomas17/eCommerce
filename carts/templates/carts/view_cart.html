@@ -12,7 +12,6 @@
 			item: item,
 			qty: qty
 		}
-		console.log(data);
 		$.ajax({
 			type: "GET",
 			url: " {% url 'cart' %}",
@@ -21,15 +20,27 @@
 				$('#ajax-message').text("Added " + data.item_added + " Deleted " + data.deleted)
 				if (data.deleted){
 					$("#item-"+item).fadeOut();
+					$('#subtotal').text(data.subtotal);
+					$('#tax').text(data.tax);
+					$('#total').text(data.total);
 				}
 				else{
 					$("#item-line-total-"+item).text(data.line_total);
 					$('#subtotal').text(data.subtotal);
+					$('#tax').text(data.tax);
+					$('#total').text(data.total);
 				}
-				showFlashMessage("Cart Updated");
+				if (data.total_items == 0 ){
+					$(".table").fadeOut();
+					var template = "{% include 'carts/empty_cart.html' %}";
+					$(".cart-main-content").html(template);
+				}
+
+				showFlashMessage(data.flash_message);
+				updateCartItemCount()
 			},
 			error: function(response, error) {
-				$("#add-form").submit()
+				$("#add-form").submit();
 			}
 		})
 
@@ -40,6 +51,10 @@
 
 {% block content %}
 
+<div class='row cart-main-content'>
+{% if object.cartitem_set.count < 1%}
+{% include 'carts/empty_cart.html' %}
+{% else %}
 <div class='row'>
 		<table class='table'>
 		{% for item in object.cartitem_set.all %}
@@ -51,10 +66,16 @@
 
 		</tr>
 		{% endfor %}
-		<tr>
-			<td id='subtotal' colspan='4' class='text-right'>Subtotal: {{object.subtotal}}</td>
-		</tr>
 		</table>
-</div>
+		<div class='row'>
+			<div class='col-md-12 pull-right'>
 
+				<p class='text-right'><strong>Subtotal:</strong> <span id='subtotal' >{{object.subtotal}}</span></p>
+				<p  class='text-right'><strong>Tax (Estimated):</strong> <span id='tax' >{{object.tax}}</span></p>
+				<p class='text-right'><strong>Total:</strong> <span id='total' >{{object.total}}</span></p>
+			</div>
+		</div>
+</div>
+</div>
+{% endif %}
 {% endblock %}
